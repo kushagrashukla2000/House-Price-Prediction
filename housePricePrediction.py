@@ -23,6 +23,11 @@ class HousePrice():
         )
     
     def clean(self) -> None:
+        null_values = list(self.dataset.isnull().sum().values)
+        ideal_values = [0] * len(null_values)
+        if null_values == ideal_values:
+            print("Data is already clean")
+            return
         self.dataset.drop(
             ['Id'],
             axis=1,
@@ -75,3 +80,9 @@ class HousePrice():
         else:
             raise Exception("Invalid Algorithm")
         print(mean_absolute_percentage_error(Y_valid, Y_pred))
+
+    def analyse(self):
+        self.clean()
+        self.label()
+        self.split()
+        self.train()

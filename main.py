@@ -12,3 +12,4 @@ if __name__ == "__main__":
     bar_graph.train()
     bar_graph.train(algo="random forest")
     bar_graph.train(algo="linear regression")
+    bar_graph.analyse()
