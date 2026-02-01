@@ -7,3 +7,4 @@ if __name__ == "__main__":
     bar_graph = BarGraph()
     bar_graph.plot()
     bar_graph.plot_by_category()
+    bar_graph.clean()
