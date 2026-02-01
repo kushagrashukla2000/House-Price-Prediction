@@ -8,7 +8,7 @@ class HeatMap(HousePrice):
         super().__init__()
         self.numerical_dataset = self.dataset.select_dtypes(include=['int64', 'float64'])
 
-    def plot(self):    
+    def plot(self) -> None:    
         plt.figure(figsize=(12, 6))
         sns.heatmap(self.numerical_dataset.corr(),
             cmap='BrBG',
@@ -17,5 +17,5 @@ class HeatMap(HousePrice):
             annot=True)
         plt.title("Correlation Heatmap of Numerical Features")
         plt.tight_layout()
-        plt.savefig("HeatmapOutput/correlation_heatmap.png")
-        print("Heatmap saved as correlation_heatmap.png")
+        plt.savefig("Graphs/correlation_heatmap.png")
+        print("Heatmap saved as correlation_heatmap.png in Graphs")
