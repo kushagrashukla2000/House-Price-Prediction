@@ -1,5 +1,10 @@
 import pandas as pd
 from sklearn.preprocessing import OneHotEncoder
+from sklearn import svm
+from sklearn.metrics import mean_absolute_percentage_error
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
 
 class HousePrice():
     def __init__(self) -> None:
@@ -8,6 +13,7 @@ class HousePrice():
         self.integer_cols = self.dataset.select_dtypes(include=['int64']).columns
         self.float_cols = self.dataset.select_dtypes(include=['float64']).columns
         self.df_final = None
+        self.split_data = None
 
     def __str__(self) -> str:
         return (
@@ -42,3 +48,30 @@ class HousePrice():
         OH_cols.columns = OH_encoder.get_feature_names_out()
         self.df_final = self.dataset.drop(object_cols, axis=1)
         self.df_final = pd.concat([self.df_final, OH_cols], axis=1)
+
+    def split(self) -> None:
+
+        X = self.df_final.drop(['SalePrice'], axis=1)
+        Y = self.df_final['SalePrice']
+
+        self.split_data = train_test_split(
+            X, Y, train_size=0.8, test_size=0.2, random_state=0)
+    
+    def train(self, algo: str = "svm") -> None:
+        X_train, X_valid, Y_train, Y_valid = self.split_data
+        
+        if algo == "svm":
+            model_SVR = svm.SVR()
+            model_SVR.fit(X_train,Y_train)
+            Y_pred = model_SVR.predict(X_valid)
+        elif algo == "random forest":
+            model_RFR = RandomForestRegressor(n_estimators=10)
+            model_RFR.fit(X_train, Y_train)
+            Y_pred = model_RFR.predict(X_valid)
+        elif algo == "linear regression":
+            model_LR = LinearRegression()
+            model_LR.fit(X_train, Y_train)
+            Y_pred = model_LR.predict(X_valid)
+        else:
+            raise Exception("Invalid Algorithm")
+        print(mean_absolute_percentage_error(Y_valid, Y_pred))
